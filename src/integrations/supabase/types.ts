@@ -14,16 +14,158 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      drafts: {
+        Row: {
+          answer: string
+          created_at: string
+          grant_id: string
+          id: string
+          question: string
+          user_id: string
+        }
+        Insert: {
+          answer: string
+          created_at?: string
+          grant_id: string
+          id?: string
+          question: string
+          user_id: string
+        }
+        Update: {
+          answer?: string
+          created_at?: string
+          grant_id?: string
+          id?: string
+          question?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drafts_grant_id_fkey"
+            columns: ["grant_id"]
+            isOneToOne: false
+            referencedRelation: "grants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      grants: {
+        Row: {
+          amount: string | null
+          created_at: string
+          deadline: string | null
+          eligibility: string | null
+          funder: string
+          funder_background: string | null
+          id: string
+          link: string | null
+          questions: Json
+          summary: string | null
+          title: string
+        }
+        Insert: {
+          amount?: string | null
+          created_at?: string
+          deadline?: string | null
+          eligibility?: string | null
+          funder: string
+          funder_background?: string | null
+          id?: string
+          link?: string | null
+          questions?: Json
+          summary?: string | null
+          title: string
+        }
+        Update: {
+          amount?: string | null
+          created_at?: string
+          deadline?: string | null
+          eligibility?: string | null
+          funder?: string
+          funder_background?: string | null
+          id?: string
+          link?: string | null
+          questions?: Json
+          summary?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          age: number | null
+          annual_revenue: string | null
+          business_name: string | null
+          business_stage: string | null
+          country: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          industry: string | null
+          story: string | null
+          updated_at: string
+        }
+        Insert: {
+          age?: number | null
+          annual_revenue?: string | null
+          business_name?: string | null
+          business_stage?: string | null
+          country?: string | null
+          created_at?: string
+          full_name?: string | null
+          id: string
+          industry?: string | null
+          story?: string | null
+          updated_at?: string
+        }
+        Update: {
+          age?: number | null
+          annual_revenue?: string | null
+          business_name?: string | null
+          business_stage?: string | null
+          country?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          industry?: string | null
+          story?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +292,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
