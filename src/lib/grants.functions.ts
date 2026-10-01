@@ -13,7 +13,7 @@ export type Explainer = {
   tips: string[];
 };
 
-function profileText(p: Record<string, unknown> | null) {
+function profileText(p: { [k: string]: unknown; full_name?: unknown; country?: unknown; age?: unknown; business_name?: unknown; business_stage?: unknown; industry?: unknown; annual_revenue?: unknown; story?: unknown } | null) {
   if (!p) return "No profile provided.";
   return [
     `Name: ${p.full_name ?? "-"}`,

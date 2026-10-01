@@ -25,7 +25,7 @@ const fields = [
   ["business_stage", "Business stage (idea, early, growing…)"], ["industry", "Industry"], ["annual_revenue", "Annual revenue (approx.)"],
 ] as const;
 
-type P = Record<string, string>;
+type P = Partial<Record<"full_name" | "country" | "age" | "business_name" | "business_stage" | "industry" | "annual_revenue" | "story", string>>;
 
 function ProfilePage() {
   const { user } = Route.useRouteContext();
@@ -35,7 +35,7 @@ function ProfilePage() {
 
   useEffect(() => {
     supabase.from("profiles").select("*").eq("id", user.id).maybeSingle().then(({ data }) => {
-      if (data) setP(Object.fromEntries(Object.entries(data).map(([k, v]) => [k, v == null ? "" : String(v)])));
+      if (data) setP(Object.fromEntries(Object.entries(data).map(([k, v]) => [k, v == null ? "" : String(v)])) as P);
     });
   }, [user.id]);
 
@@ -43,12 +43,12 @@ function ProfilePage() {
     e.preventDefault();
     setBusy(true);
     const { error } = await supabase.from("profiles").upsert({
-      id: user.id, full_name: p.full_name, country: p.country, age: p.age ? Number(p.age) : null,
-      business_name: p.business_name, business_stage: p.business_stage, industry: p.industry,
-      annual_revenue: p.annual_revenue, story: p.story, updated_at: new Date().toISOString(),
+      id: user.id, full_name: p.full_name || null, country: p.country || null, age: p.age ? Number(p.age) : null,
+      business_name: p.business_name || null, business_stage: p.business_stage || null, industry: p.industry || null,
+      annual_revenue: p.annual_revenue || null, story: p.story || null, updated_at: new Date().toISOString(),
     });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Profile saved");
     navigate({ to: "/grants" });
   };

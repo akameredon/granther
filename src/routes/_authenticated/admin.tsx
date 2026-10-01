@@ -44,7 +44,7 @@ function AdminPage() {
       questions: f.questions.split("\n").map((s) => s.trim()).filter(Boolean),
     };
     const { error } = f.id ? await supabase.from("grants").update(row).eq("id", f.id) : await supabase.from("grants").insert(row);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Saved");
     setF(empty);
     qc.invalidateQueries({ queryKey: ["grants"] });
