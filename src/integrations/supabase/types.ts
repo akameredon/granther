@@ -14,6 +14,44 @@ export type Database = {
   }
   public: {
     Tables: {
+      applications: {
+        Row: {
+          applied_at: string | null
+          created_at: string
+          grant_id: string
+          id: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          applied_at?: string | null
+          created_at?: string
+          grant_id: string
+          id?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          applied_at?: string | null
+          created_at?: string
+          grant_id?: string
+          id?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "applications_grant_id_fkey"
+            columns: ["grant_id"]
+            isOneToOne: false
+            referencedRelation: "grants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       drafts: {
         Row: {
           answer: string
@@ -57,11 +95,14 @@ export type Database = {
           eligibility: string | null
           funder: string
           funder_background: string | null
+          grant_type: string
           id: string
           link: string | null
           questions: Json
           summary: string | null
           title: string
+          verification: string
+          verification_note: string | null
         }
         Insert: {
           amount?: string | null
@@ -70,11 +111,14 @@ export type Database = {
           eligibility?: string | null
           funder: string
           funder_background?: string | null
+          grant_type?: string
           id?: string
           link?: string | null
           questions?: Json
           summary?: string | null
           title: string
+          verification?: string
+          verification_note?: string | null
         }
         Update: {
           amount?: string | null
@@ -83,11 +127,14 @@ export type Database = {
           eligibility?: string | null
           funder?: string
           funder_background?: string | null
+          grant_type?: string
           id?: string
           link?: string | null
           questions?: Json
           summary?: string | null
           title?: string
+          verification?: string
+          verification_note?: string | null
         }
         Relationships: []
       }
@@ -99,9 +146,13 @@ export type Database = {
           business_stage: string | null
           country: string | null
           created_at: string
+          daily_goal: number
+          education_level: string | null
+          field_of_study: string | null
           full_name: string | null
           id: string
           industry: string | null
+          state: string | null
           story: string | null
           updated_at: string
         }
@@ -112,9 +163,13 @@ export type Database = {
           business_stage?: string | null
           country?: string | null
           created_at?: string
+          daily_goal?: number
+          education_level?: string | null
+          field_of_study?: string | null
           full_name?: string | null
           id: string
           industry?: string | null
+          state?: string | null
           story?: string | null
           updated_at?: string
         }
@@ -125,11 +180,48 @@ export type Database = {
           business_stage?: string | null
           country?: string | null
           created_at?: string
+          daily_goal?: number
+          education_level?: string | null
+          field_of_study?: string | null
           full_name?: string | null
           id?: string
           industry?: string | null
+          state?: string | null
           story?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      stories: {
+        Row: {
+          approved: boolean
+          author_name: string
+          body: string
+          created_at: string
+          grant_name: string | null
+          id: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          approved?: boolean
+          author_name: string
+          body: string
+          created_at?: string
+          grant_name?: string | null
+          id?: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          approved?: boolean
+          author_name?: string
+          body?: string
+          created_at?: string
+          grant_name?: string | null
+          id?: string
+          title?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -151,11 +243,45 @@ export type Database = {
         }
         Relationships: []
       }
+      waitlist: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          phone: string | null
+          reason: string | null
+          state: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          phone?: string | null
+          reason?: string | null
+          state?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          phone?: string | null
+          reason?: string | null
+          state?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      am_i_member: { Args: never; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

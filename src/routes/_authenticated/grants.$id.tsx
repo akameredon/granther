@@ -6,6 +6,8 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { explainGrant, writeAnswer } from "@/lib/grants.functions";
 import { SiteHeader } from "@/components/SiteHeader";
+import { MemberGate, verificationStyle } from "@/components/MemberGate";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -20,7 +22,7 @@ export const Route = createFileRoute("/_authenticated/grants/$id")({
       { property: "og:description", content: "Grant explainer and application writer." },
     ],
   }),
-  component: GrantPage,
+  component: () => <MemberGate><GrantPage /></MemberGate>,
 });
 
 function List({ title, items }: { title: string; items: string[] }) {
@@ -67,6 +69,23 @@ function GrantPage() {
             Official page <ExternalLink className="h-3 w-3" />
           </a>
         )}
+        {(() => {
+          const v = verificationStyle[g.verification] ?? verificationStyle["unverified"]!;
+          return (
+            <div className={`mt-6 rounded-xl p-4 ${g.verification === "warning" ? "border-l-4 border-destructive bg-muted" : "bg-secondary"}`}>
+              <Badge className={v.cls}>{v.label}</Badge>
+              <p className="mt-2 text-sm">
+                {g.verification_note ||
+                  (g.verification === "verified"
+                    ? "Our team has checked this grant and confirmed it is real."
+                    : g.verification === "warning"
+                      ? "Be careful. Never pay money to apply for a grant."
+                      : "We haven't finished checking this grant yet. Never pay money to apply.")}
+              </p>
+            </div>
+          );
+        })()}
+
 
         <section className="mt-10 space-y-6 rounded-2xl border bg-card p-6 shadow-soft">
           <h2 className="text-2xl font-semibold">Explained for you</h2>

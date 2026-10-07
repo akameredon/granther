@@ -21,11 +21,12 @@ export const Route = createFileRoute("/_authenticated/profile")({
 });
 
 const fields = [
-  ["full_name", "Full name"], ["country", "Country"], ["age", "Age"], ["business_name", "Business name"],
-  ["business_stage", "Business stage (idea, early, growing…)"], ["industry", "Industry"], ["annual_revenue", "Annual revenue (approx.)"],
+  ["full_name", "Full name"], ["state", "State (e.g. Lagos)"], ["age", "Age"], ["business_name", "Business name"],
+  ["business_stage", "Business stage (idea, early, growing…)"], ["industry", "Industry"], ["annual_revenue", "Annual revenue in ₦ (approx.)"],
+  ["education_level", "Education level (for scholarships)"], ["field_of_study", "Field of study / course"],
 ] as const;
 
-type P = Partial<Record<"full_name" | "country" | "age" | "business_name" | "business_stage" | "industry" | "annual_revenue" | "story", string>>;
+type P = Partial<Record<"full_name" | "country" | "age" | "business_name" | "business_stage" | "industry" | "annual_revenue" | "story" | "state" | "education_level" | "field_of_study" | "country", string>>;
 
 function ProfilePage() {
   const { user } = Route.useRouteContext();
@@ -43,7 +44,7 @@ function ProfilePage() {
     e.preventDefault();
     setBusy(true);
     const { error } = await supabase.from("profiles").upsert({
-      id: user.id, full_name: p.full_name || null, country: p.country || null, age: p.age ? Number(p.age) : null,
+      id: user.id, full_name: p.full_name || null, country: "Nigeria", state: p.state || null, education_level: p.education_level || null, field_of_study: p.field_of_study || null, age: p.age ? Number(p.age) : null,
       business_name: p.business_name || null, business_stage: p.business_stage || null, industry: p.industry || null,
       annual_revenue: p.annual_revenue || null, story: p.story || null, updated_at: new Date().toISOString(),
     });

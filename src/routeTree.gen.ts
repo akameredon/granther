@@ -12,8 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as StoriesRouteImport } from './routes/stories'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedTrackerRouteImport } from './routes/_authenticated/tracker'
 import { Route as AuthenticatedGrantsIndexRouteImport } from './routes/_authenticated/grants.index'
 import { Route as AuthenticatedGrantsIdRouteImport } from './routes/_authenticated/grants.$id'
 
@@ -31,6 +33,11 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StoriesRoute = StoriesRouteImport.update({
+  id: '/stories',
+  path: '/stories',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -39,6 +46,11 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
 const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedTrackerRoute = AuthenticatedTrackerRouteImport.update({
+  id: '/tracker',
+  path: '/tracker',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedGrantsIndexRoute =
@@ -56,16 +68,20 @@ const AuthenticatedGrantsIdRoute = AuthenticatedGrantsIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/stories': typeof StoriesRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/tracker': typeof AuthenticatedTrackerRoute
   '/grants/$id': typeof AuthenticatedGrantsIdRoute
   '/grants/': typeof AuthenticatedGrantsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/stories': typeof StoriesRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/tracker': typeof AuthenticatedTrackerRoute
   '/grants/$id': typeof AuthenticatedGrantsIdRoute
   '/grants': typeof AuthenticatedGrantsIndexRoute
 }
@@ -74,23 +90,43 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/stories': typeof StoriesRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/tracker': typeof AuthenticatedTrackerRoute
   '/_authenticated/grants/$id': typeof AuthenticatedGrantsIdRoute
   '/_authenticated/grants/': typeof AuthenticatedGrantsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/admin' | '/profile' | '/grants/$id' | '/grants/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/stories'
+    | '/admin'
+    | '/profile'
+    | '/tracker'
+    | '/grants/$id'
+    | '/grants/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/admin' | '/profile' | '/grants/$id' | '/grants'
+  to:
+    | '/'
+    | '/auth'
+    | '/stories'
+    | '/admin'
+    | '/profile'
+    | '/tracker'
+    | '/grants/$id'
+    | '/grants'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/stories'
     | '/_authenticated/admin'
     | '/_authenticated/profile'
+    | '/_authenticated/tracker'
     | '/_authenticated/grants/$id'
     | '/_authenticated/grants/'
   fileRoutesById: FileRoutesById
@@ -99,6 +135,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  StoriesRoute: typeof StoriesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -124,6 +161,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/stories': {
+      id: '/stories'
+      path: '/stories'
+      fullPath: '/stories'
+      preLoaderRoute: typeof StoriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
       path: '/admin'
@@ -136,6 +180,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/tracker': {
+      id: '/_authenticated/tracker'
+      path: '/tracker'
+      fullPath: '/tracker'
+      preLoaderRoute: typeof AuthenticatedTrackerRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/grants/': {
@@ -158,6 +209,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedTrackerRoute: typeof AuthenticatedTrackerRoute
   AuthenticatedGrantsIdRoute: typeof AuthenticatedGrantsIdRoute
   AuthenticatedGrantsIndexRoute: typeof AuthenticatedGrantsIndexRoute
 }
@@ -165,6 +217,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedTrackerRoute: AuthenticatedTrackerRoute,
   AuthenticatedGrantsIdRoute: AuthenticatedGrantsIdRoute,
   AuthenticatedGrantsIndexRoute: AuthenticatedGrantsIndexRoute,
 }
@@ -176,6 +229,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  StoriesRoute: StoriesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
