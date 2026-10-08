@@ -5,5 +5,5 @@
 - [x] Winner stories (admin approves) — page built, admin approval tab missing
 - [x] Scholarships + Nigeria focus in profile & AI
 - [x] GitHub: code pushed to github.com/akameredon/granther, two-way sync live
-- [ ] Repo is public and .env (backend address + publishable key) is committed — make repo private or untrack .env
+- [x] Repo privacy settled — owner chose to keep it public (do not re-raise)
 - [ ] Payments (blocked: user to confirm price; recommended ₦2,500/mo)
