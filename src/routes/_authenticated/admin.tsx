@@ -122,13 +122,13 @@ function ApprovalsPanel() {
 
   const setStatus = async (id: string, status: string) => {
     const { error } = await supabase.from("waitlist").update({ status }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(status === "approved" ? "Approved — she can now get in" : "Updated");
     qc.invalidateQueries({ queryKey: ["admin-waitlist"] });
   };
   const setStory = async (id: string, approved: boolean) => {
     const { error } = await supabase.from("stories").update({ approved }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     qc.invalidateQueries({ queryKey: ["admin-stories"] });
   };
   const delStory = async (id: string) => {

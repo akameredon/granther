@@ -23,9 +23,9 @@ export function WaitlistForm() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const p = schema.safeParse(f);
-    if (!p.success) { toast.error(p.error.issues[0].message); return; }
+    if (!p.success) { toast.error(p.error.issues[0]?.message ?? "Check the form"); return; }
     setBusy(true);
-    const { error } = await supabase.from("waitlist").insert({ ...p.data, email: p.data.email.toLowerCase(), status: "pending" });
+    const { error } = await supabase.from("waitlist").insert({ full_name: p.data.full_name, email: p.data.email.toLowerCase(), phone: p.data.phone || null, state: p.data.state || null, reason: p.data.reason || null, status: "pending" });
     setBusy(false);
     if (error) { toast.error("Couldn't join right now. Please try again."); return; }
     setDone(true);
