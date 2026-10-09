@@ -36,15 +36,20 @@ export function SiteHeader() {
           Grant<span className="text-accent">Her</span>
         </Link>
         <nav className="flex items-center gap-4 sm:gap-6">
+          <Link to="/stories" className={link} activeProps={{ className: "text-foreground font-medium" }}>Stories</Link>
           {signedIn ? (
             <>
               <Link to="/grants" className={link} activeProps={{ className: "text-foreground font-medium" }}>Grants</Link>
+              <Link to="/tracker" className={link} activeProps={{ className: "text-foreground font-medium" }}>Tracker</Link>
               <Link to="/profile" className={link} activeProps={{ className: "text-foreground font-medium" }}>Profile</Link>
               {isAdmin && <Link to="/admin" className={link} activeProps={{ className: "text-foreground font-medium" }}>Admin</Link>}
               <Button size="sm" variant="ghost" onClick={signOut}>Sign out</Button>
             </>
           ) : (
-            <Button asChild size="sm"><Link to="/auth">Get started</Link></Button>
+            <>
+              <Link to="/" hash="waitlist" className={link}>Waitlist</Link>
+              <Button asChild size="sm"><Link to="/auth">Get started</Link></Button>
+            </>
           )}
         </nav>
       </div>

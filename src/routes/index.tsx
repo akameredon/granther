@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/SiteHeader";
+import { WaitlistForm } from "@/components/WaitlistForm";
 import { Filter, BookOpen, PenLine } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -54,6 +55,12 @@ function Index() {
             <p className="mt-2 text-muted-foreground">{s.text}</p>
           </div>
         ))}
+      </section>
+      <section id="waitlist" className="mx-auto max-w-2xl scroll-mt-20 px-5 pb-24">
+        <p className="text-center text-sm uppercase tracking-[0.2em] text-accent">Invite only</p>
+        <h2 className="mt-3 text-center text-4xl font-semibold">Join the waitlist</h2>
+        <p className="mx-auto mt-3 max-w-lg text-center text-muted-foreground">GrantHer opens in small waves for Nigerian women. Request your invite and we'll let you in.</p>
+        <div className="mt-8"><WaitlistForm /></div>
       </section>
     </div>
   );
